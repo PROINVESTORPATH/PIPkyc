@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Investor KYC & Risk Assessment Form</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 300;
+        }
+
+        .header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .form-container {
+            padding: 40px;
+        }
+
+        .section {
+            margin-bottom: 40px;
+            padding: 30px;
+            background: #f8f9ff;
+            border-radius: 15px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s ease;
+        }
+
+        .section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        }
+
+        .section h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+            display: flex;
+            align-items: center;
+        }
+
+        .section h2::before {
+            content: '';
+            width: 6px;
+            height: 6px;
+            background: #667eea;
+            border-radius: 50%;
+            margin-right: 10px;
+        }
+
+        .question-group {
+            margin-bottom: 25px;
+        }
+
+        .question {
+            font-weight: 600;
+            color: #34495e;
+            margin-bottom: 15px;
+            font-size: 1.1em;
+            line-height: 1.4;
+        }
+
+        .options {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .option {
+            display: flex;
+            align-items: center;
+            padding: 12px 15px;
+            background: white;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .option:hover {
+            border-color: #667eea;
+            background: #f0f3ff;
+        }
+
+        .option input[type="radio"] {
+            margin-right: 12px;
+            accent-color: #667eea;
+        }
+
+        .option label {
+            cursor: pointer;
+            flex: 1;
+            font-size: 0.95em;
+        }
+
+        .text-input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .text-input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #e0e6ed;
+            border-radius: 4px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+
+        .submit-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 40px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1.1em;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 40px auto 0;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .risk-indicator {
+            display: inline-block;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-left: 10px;
+        }
+
+        .risk-low { background: #d4edda; color: #155724; }
+        .risk-medium { background: #fff3cd; color: #856404; }
+        .risk-high { background: #f8d7da; color: #721c24; }
+
+        .info-tooltip {
+            position: relative;
+            display: inline-block;
+            margin-left: 5px;
+            color: #667eea;
+            cursor: help;
+        }
+
+        .grid-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 10px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                margin: 10px;
+            }
+            
+            .header {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 2em;
+            }
+            
+            .form-container {
+                padding: 20px;
+            }
+            
+            .section {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Investor KYC & Risk Assessment</h1>
+            <p>Comprehensive Portfolio Management Questionnaire</p>
+        </div>
+
+        <div class="form-container">
+            <div class="progress-bar">
+                <div class="progress-fill" id="progressFill"></div>
+            </div>
+
+            <form id="kycForm" action="https://formspree.io/f/mrbkvwzd" method="POST">
+                <!-- Personal Information Section -->
+                <div class="section">
+                    <h2>Personal Information</h2>
+                    
+                    <div class="question-group">
+                        <div class="question">Email Address</div>
+                        <input type="email" class="text-input" name="email" required>
+                    </div>
+                    
+                    <div class="question-group">
+                        <div class="question">Phone Number</div>
+                        <input type="tel" class="text-input" name="phone" required>
+                    </div>
+                    
+                    <div class="question-group">
+                        <div class="question">Age Group</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="ageGroup" value="18-25" id="age1">
+                                <label for="age1">18-25 years</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="ageGroup" value="26-35" id="age2">
+                                <label for="age2">26-35 years</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="ageGroup" value="36-45" id="age3">
+                                <label for="age3">36-45 years</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="ageGroup" value="46-55" id="age4">
+                                <label for="age4">46-55 years</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="ageGroup" value="55+" id="age5">
+                                <label for="age5">Above 55 years</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Employment Status</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="employment" value="salaried" id="emp1">
+                                <label for="emp1">Salaried Employee</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="employment" value="business" id="emp2">
+                                <label for="emp2">Business Owner</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="employment" value="professional" id="emp3">
+                                <label for="emp3">Professional/Consultant</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="employment" value="retired" id="emp4">
+                                <label for="emp4">Retired</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="employment" value="other" id="emp5">
+                                <label for="emp5">Other</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Financial Profile Section -->
+                <div class="section">
+                    <h2>Financial Profile</h2>
+                    
+                    <div class="question-group">
+                        <div class="question">Annual Income Range</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="income" value="0-5L" id="inc1">
+                                <label for="inc1">Below ₹5 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="income" value="5-10L" id="inc2">
+                                <label for="inc2">₹5-10 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="income" value="10-25L" id="inc3">
+                                <label for="inc3">₹10-25 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="income" value="25-50L" id="inc4">
+                                <label for="inc4">₹25-50 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="income" value="50L+" id="inc5">
+                                <label for="inc5">Above ₹50 Lakhs</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Monthly Surplus Available for Investment</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="surplus" value="0-10K" id="sur1">
+                                <label for="sur1">Below ₹10,000</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="surplus" value="10-25K" id="sur2">
+                                <label for="sur2">₹10,000-25,000</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="surplus" value="25-50K" id="sur3">
+                                <label for="sur3">₹25,000-50,000</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="surplus" value="50K-1L" id="sur4">
+                                <label for="sur4">₹50,000-1,00,000</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="surplus" value="1L+" id="sur5">
+                                <label for="sur5">Above ₹1,00,000</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Initial Investment Amount</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="initialInvestment" value="1-5L" id="init1">
+                                <label for="init1">₹1-5 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="initialInvestment" value="5-10L" id="init2">
+                                <label for="init2">₹5-10 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="initialInvestment" value="10-25L" id="init3">
+                                <label for="init3">₹10-25 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="initialInvestment" value="25-50L" id="init4">
+                                <label for="init4">₹25-50 Lakhs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="initialInvestment" value="50L+" id="init5">
+                                <label for="init5">Above ₹50 Lakhs</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Existing Investment Portfolio</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="existingPortfolio" value="none" id="port1">
+                                <label for="port1">No existing investments</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="existingPortfolio" value="conservative" id="port2">
+                                <label for="port2">Conservative (FD, PPF, Bonds)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="existingPortfolio" value="moderate" id="port3">
+                                <label for="port3">Moderate (Mutual Funds, Some Stocks)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="existingPortfolio" value="aggressive" id="port4">
+                                <label for="port4">Aggressive (Direct Stocks, Options)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="existingPortfolio" value="diversified" id="port5">
+                                <label for="port5">Well Diversified across asset classes</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Goals Section -->
+                <div class="section">
+                    <h2>Investment Goals & Objectives</h2>
+                    
+                    <div class="question-group">
+                        <div class="question">Primary Investment Goal</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="primaryGoal" value="wealth-creation" id="goal1">
+                                <label for="goal1">Long-term wealth creation</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="primaryGoal" value="retirement" id="goal2">
+                                <label for="goal2">Retirement planning</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="primaryGoal" value="child-education" id="goal3">
+                                <label for="goal3">Child's education/marriage</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="primaryGoal" value="home-purchase" id="goal4">
+                                <label for="goal4">Home purchase</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="primaryGoal" value="regular-income" id="goal5">
+                                <label for="goal5">Regular income generation</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Investment Time Horizon</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="timeHorizon" value="short" id="time1">
+                                <label for="time1">Short-term (1-3 years)</label>
+                                <span class="risk-indicator risk-low">Low Growth</span>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="timeHorizon" value="medium" id="time2">
+                                <label for="time2">Medium-term (3-7 years)</label>
+                                <span class="risk-indicator risk-medium">Moderate Growth</span>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="timeHorizon" value="long" id="time3">
+                                <label for="time3">Long-term (7+ years)</label>
+                                <span class="risk-indicator risk-high">High Growth</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Expected Annual Returns</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="expectedReturns" value="8-12" id="ret1">
+                                <label for="ret1">8-12% (Conservative)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="expectedReturns" value="12-18" id="ret2">
+                                <label for="ret2">12-18% (Moderate)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="expectedReturns" value="18-25" id="ret3">
+                                <label for="ret3">18-25% (Aggressive)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="expectedReturns" value="25+" id="ret4">
+                                <label for="ret4">Above 25% (Very Aggressive)</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Risk Assessment Section -->
+                <div class="section">
+                    <h2>Risk Assessment & Psychology</h2>
+                    
+                    <div class="question-group">
+                        <div class="question">How would you react if your portfolio loses 20% in a month?</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="marketLoss" value="panic-sell" id="loss1">
+                                <label for="loss1">Panic and sell immediately</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketLoss" value="concerned-monitor" id="loss2">
+                                <label for="loss2">Get very concerned and monitor closely</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketLoss" value="wait-recover" id="loss3">
+                                <label for="loss3">Wait for market to recover</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketLoss" value="buy-more" id="loss4">
+                                <label for="loss4">Buy more at lower prices</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">During a market crash, what's your typical behavior?</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="marketCrash" value="exit-completely" id="crash1">
+                                <label for="crash1">Exit the market completely</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketCrash" value="reduce-exposure" id="crash2">
+                                <label for="crash2">Reduce market exposure significantly</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketCrash" value="stay-course" id="crash3">
+                                <label for="crash3">Stay the course with current allocation</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketCrash" value="increase-investment" id="crash4">
+                                <label for="crash4">Increase investment taking advantage of low prices</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Maximum acceptable loss in your portfolio in a year</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="maxLoss" value="0-5" id="maxl1">
+                                <label for="maxl1">0-5% (Very Conservative)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="maxLoss" value="5-15" id="maxl2">
+                                <label for="maxl2">5-15% (Conservative)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="maxLoss" value="15-25" id="maxl3">
+                                <label for="maxl3">15-25% (Moderate)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="maxLoss" value="25-40" id="maxl4">
+                                <label for="maxl4">25-40% (Aggressive)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="maxLoss" value="40+" id="maxl5">
+                                <label for="maxl5">Above 40% (Very Aggressive)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Your investment style preference</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="investmentStyle" value="conservative" id="style1">
+                                <label for="style1">Conservative - Capital preservation priority</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="investmentStyle" value="moderate" id="style2">
+                                <label for="style2">Moderate - Balanced growth and safety</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="investmentStyle" value="aggressive" id="style3">
+                                <label for="style3">Aggressive - Maximum growth potential</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="investmentStyle" value="speculative" id="style4">
+                                <label for="style4">Speculative - High risk, high reward</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Investment Knowledge Section -->
+                <div class="section">
+                    <h2>Investment Knowledge & Experience</h2>
+                    
+                    <div class="question-group">
+                        <div class="question">Stock Market Experience</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="experience" value="beginner" id="exp1">
+                                <label for="exp1">Beginner (Less than 2 years)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="intermediate" id="exp2">
+                                <label for="exp2">Intermediate (2-5 years)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="experienced" id="exp3">
+                                <label for="exp3">Experienced (5-10 years)</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="experience" value="expert" id="exp4">
+                                <label for="exp4">Expert (10+ years)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Understanding of financial instruments</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="financialKnowledge" value="basic" id="know1">
+                                <label for="know1">Basic - Stocks, Bonds, FDs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="financialKnowledge" value="intermediate" id="know2">
+                                <label for="know2">Intermediate - Mutual Funds, ETFs</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="financialKnowledge" value="advanced" id="know3">
+                                <label for="know3">Advanced - Options, Futures, Derivatives</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="financialKnowledge" value="expert" id="know4">
+                                <label for="know4">Expert - Complex strategies, Portfolio theory</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Frequency of portfolio monitoring</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="monitoring" value="daily" id="mon1">
+                                <label for="mon1">Daily - Check prices every day</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="monitoring" value="weekly" id="mon2">
+                                <label for="mon2">Weekly - Check once a week</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="monitoring" value="monthly" id="mon3">
+                                <label for="mon3">Monthly - Check once a month</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="monitoring" value="quarterly" id="mon4">
+                                <label for="mon4">Quarterly - Long-term perspective</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Market Psychology Section -->
+                <div class="section">
+                    <h2>Market Psychology & Behavioral Assessment</h2>
+                    
+                    <div class="question-group">
+                        <div class="question">When markets are at all-time highs, you feel:</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="marketHighs" value="euphoric" id="high1">
+                                <label for="high1">Euphoric - Want to invest more</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketHighs" value="cautious" id="high2">
+                                <label for="high2">Cautious - Worried about crash</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketHighs" value="neutral" id="high3">
+                                <label for="high3">Neutral - Continue regular investing</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="marketHighs" value="contrarian" id="high4">
+                                <label for="high4">Contrarian - Time to be selective</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Your approach to market volatility</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="volatility" value="avoid" id="vol1">
+                                <label for="vol1">Avoid volatile stocks/markets</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="volatility" value="tolerate" id="vol2">
+                                <label for="vol2">Tolerate for long-term gains</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="volatility" value="embrace" id="vol3">
+                                <label for="vol3">Embrace as opportunity</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="volatility" value="profit" id="vol4">
+                                <label for="vol4">Actively trade to profit from volatility</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="question-group">
+                        <div class="question">Decision making under stress</div>
+                        <div class="options">
+                            <div class="option">
+                                <input type="radio" name="stressDecision" value="emotional" id="stress1">
+                                <label for="stress1">Emotional - Make quick decisions</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="stressDecision" value="freeze" id="stress2">
+                                <label for="stress2">Freeze - Unable to make decisions</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="stressDecision" value="analytical" id="stress3">
+                                <label for="stress3">Analytical - Analyze before deciding</label>
+                            </div>
+                            <div class="option">
+                                <input type="radio" name="stressDecision" value="systematic" i
